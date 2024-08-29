@@ -1,35 +1,88 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+import { Field, Form, Formik } from "formik";
+import fetchImagesWithTopic from "./components/servise/images-api";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [value, setValue] = useState("");
+  const [page, setPage] = useState(1);
+  const [images, setImages] = useState([]);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isChoose, setIsChoose] = useState(false);
+
+  useEffect(() => {
+    async function getImages() {
+      if (value.trim() === "") {
+        return;
+      }
+      try {
+        setLoading(true);
+        setError(false);
+        const newImages = await fetchImagesWithTopic(value, page);
+        setImages((prevState) => [...prevState, ...newImages]);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+    getImages();
+  }, [value, page]);
+
+  const handleSubmit = (values, actions) => {
+    setValue(values.searchImg);
+    actions.resetForm();
+  };
+
+  const handleLoadMore = () => setPage(page + 1);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+      <header>
+        <nav>
+          <ul>
+            <li>
+              <button onClick={() => setIsChoose(false)} type="button">
+                Random images
+              </button>
+            </li>
+            <li>
+              <button onClick={() => setIsChoose(true)} type="button">
+                Search image
+              </button>
+            </li>
+          </ul>
+          {isChoose && (
+            <Formik initialValues={{ searchImg: "" }} onSubmit={handleSubmit}>
+              <Form autoComplete="off">
+                <Field type="text" name="searchImg" placeholder="Search" />
+                <button type="submit">Search</button>
+              </Form>
+            </Formik>
+          )}
+        </nav>
+      </header>
+      {loading && <b>LOADING...</b>}
+      {error && <b>Don't worry, try it later</b>}
+      {images.length > 0 && (
+        <ul>
+          {images.map((image) => (
+            <li key={image.id}>
+              <img src={image.urls.small} alt={image.alt_description} />
+              <p>{image.description}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {images.length > 0 && !loading && (
+        <button onClick={handleLoadMore} type="button">
+          Load more
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
