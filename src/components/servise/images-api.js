@@ -12,6 +12,5 @@ export default async function fetchImagesWithTopic(topic, page) {
             page
         }
     })
-    // console.log(response.data.results);
     return response.data.results
 }

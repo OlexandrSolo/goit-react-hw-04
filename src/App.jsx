@@ -2,20 +2,23 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { Field, Form, Formik } from "formik";
 import fetchImagesWithTopic from "./components/servise/images-api";
+import fetchRandomImages from "./components/servise/random-images-api";
 
 function App() {
   const [value, setValue] = useState("");
   const [page, setPage] = useState(1);
+  const [count, setCount] = useState(10);
   const [images, setImages] = useState([]);
+  // const [randomImages, setRandomImages] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isChoose, setIsChoose] = useState(false);
 
   useEffect(() => {
+    if (value.trim() === "") {
+      return;
+    }
     async function getImages() {
-      if (value.trim() === "") {
-        return;
-      }
       try {
         setLoading(true);
         setError(false);
@@ -30,12 +33,31 @@ function App() {
     getImages();
   }, [value, page]);
 
+  const handleRandomImages = async () => {
+    setIsChoose(false);
+    setImages([]);
+    setPage(1);
+    setLoading(true);
+    setError(false);
+    try {
+      const randomImages = await fetchRandomImages(page);
+      setImages(randomImages);
+    } catch (error) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = (values, actions) => {
+    setImages([]);
     setValue(values.searchImg);
     actions.resetForm();
   };
 
-  const handleLoadMore = () => setPage(page + 1);
+  const handleLoadMore = () => {
+    setPage(page + 1);
+  };
 
   return (
     <>
@@ -43,7 +65,7 @@ function App() {
         <nav>
           <ul>
             <li>
-              <button onClick={() => setIsChoose(false)} type="button">
+              <button onClick={() => handleRandomImages()} type="button">
                 Random images
               </button>
             </li>
