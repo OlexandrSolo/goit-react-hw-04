@@ -1,8 +1,10 @@
+import toast, { Toaster } from "react-hot-toast";
+import { Triangle } from "react-loader-spinner";
 import { useEffect, useState } from "react";
 import "./App.css";
-import { Field, Form, Formik } from "formik";
 import fetchImagesWithTopic from "./components/servise/images-api";
-import fetchRandomImages from "./components/servise/random-images-api";
+import Header from "./components/header/header";
+import Gallery from "./components/galleryList/galleryList";
 
 function App() {
   const [value, setValue] = useState("");
@@ -10,8 +12,13 @@ function App() {
   const [images, setImages] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isRandom, setIsRandom] = useState(false);
-  const [showFormik, setShowFormik] = useState(false);
+
+  const wrapperStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+  };
 
   useEffect(() => {
     if (value.trim() === "") {
@@ -25,6 +32,7 @@ function App() {
         setImages((prevState) => [...prevState, ...newImages]);
       } catch (error) {
         setError(true);
+        toast.error("This didn't work.");
       } finally {
         setLoading(false);
       }
@@ -32,41 +40,14 @@ function App() {
     getImages();
   }, [value, page]);
 
-  useEffect(() => {
-    if (!isRandom && value.trim() === "") {
-      return;
+  const handleSubmit = (value) => {
+    if (value.trim() === "") {
+      toast("Please entered text", {
+        icon: "🔎",
+      });
     }
-    const handleRandomImages = async () => {
-      setIsRandom(true);
-      setImages([]);
-      setPage(1);
-      setLoading(true);
-      setError(false);
-      try {
-        const randomImages = await fetchRandomImages(page);
-        setImages(randomImages);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-    handleRandomImages();
-  }, [page, isRandom]);
-
-  const handleSubmit = (values, actions) => {
     setImages([]);
-    setValue(values.searchImg);
-    actions.resetForm();
-  };
-  const handleSearchImage = () => {
-    setImages([]);
-    setIsRandom(false);
-    setShowFormik(true);
-  };
-  const handleRandomImage = () => {
-    setIsRandom(true);
-    setShowFormik(false);
+    setValue(value);
   };
 
   const handleLoadMore = () => {
@@ -75,41 +56,31 @@ function App() {
 
   return (
     <>
-      <header>
-        <nav>
-          <ul>
-            <li>
-              <button onClick={() => handleRandomImage()} type="button">
-                Random images
-              </button>
-            </li>
-            <li>
-              <button onClick={() => handleSearchImage()} type="button">
-                Search image
-              </button>
-            </li>
-          </ul>
-          {showFormik && (
-            <Formik initialValues={{ searchImg: "" }} onSubmit={handleSubmit}>
-              <Form autoComplete="off">
-                <Field type="text" name="searchImg" placeholder="Search" />
-                <button type="submit">Search</button>
-              </Form>
-            </Formik>
-          )}
-        </nav>
-      </header>
-      {loading && <b>LOADING...</b>}
-      {error && <b>Don't worry, try it later</b>}
-      {images.length > 0 && (
-        <ul>
-          {images.map((image) => (
-            <li key={image.id}>
-              <img src={image.urls.small} alt={image.alt_description} />
-              <p>{image.description}</p>
-            </li>
-          ))}
-        </ul>
+      <Header submitForm={handleSubmit} />
+      {loading && (
+        <div>
+          <Triangle
+            visible={true}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="triangle-loading"
+            wrapperStyle={wrapperStyle}
+            wrapperClass=""
+          />
+        </div>
+      )}
+      {error && (
+        <div>
+          <Toaster position="bottom-center" reverseOrder={false} />
+        </div>
+      )}
+      {images.length > 0 ? (
+        <Gallery images={images} />
+      ) : (
+        <div>
+          <Toaster position="bottom-center" reverseOrder={false} />
+        </div>
       )}
 
       {images.length > 0 && !loading && (
