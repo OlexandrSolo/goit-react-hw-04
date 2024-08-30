@@ -7,12 +7,11 @@ import fetchRandomImages from "./components/servise/random-images-api";
 function App() {
   const [value, setValue] = useState("");
   const [page, setPage] = useState(1);
-  const [count, setCount] = useState(10);
   const [images, setImages] = useState([]);
-  // const [randomImages, setRandomImages] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isChoose, setIsChoose] = useState(false);
+  const [isRandom, setIsRandom] = useState(false);
+  const [showFormik, setShowFormik] = useState(false);
 
   useEffect(() => {
     if (value.trim() === "") {
@@ -33,26 +32,41 @@ function App() {
     getImages();
   }, [value, page]);
 
-  const handleRandomImages = async () => {
-    setIsChoose(false);
-    setImages([]);
-    setPage(1);
-    setLoading(true);
-    setError(false);
-    try {
-      const randomImages = await fetchRandomImages(page);
-      setImages(randomImages);
-    } catch (error) {
-      setError(true);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (!isRandom && value.trim() === "") {
+      return;
     }
-  };
+    const handleRandomImages = async () => {
+      setIsRandom(true);
+      setImages([]);
+      setPage(1);
+      setLoading(true);
+      setError(false);
+      try {
+        const randomImages = await fetchRandomImages(page);
+        setImages(randomImages);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    handleRandomImages();
+  }, [page, isRandom]);
 
   const handleSubmit = (values, actions) => {
     setImages([]);
     setValue(values.searchImg);
     actions.resetForm();
+  };
+  const handleSearchImage = () => {
+    setImages([]);
+    setIsRandom(false);
+    setShowFormik(true);
+  };
+  const handleRandomImage = () => {
+    setIsRandom(true);
+    setShowFormik(false);
   };
 
   const handleLoadMore = () => {
@@ -65,17 +79,17 @@ function App() {
         <nav>
           <ul>
             <li>
-              <button onClick={() => handleRandomImages()} type="button">
+              <button onClick={() => handleRandomImage()} type="button">
                 Random images
               </button>
             </li>
             <li>
-              <button onClick={() => setIsChoose(true)} type="button">
+              <button onClick={() => handleSearchImage()} type="button">
                 Search image
               </button>
             </li>
           </ul>
-          {isChoose && (
+          {showFormik && (
             <Formik initialValues={{ searchImg: "" }} onSubmit={handleSubmit}>
               <Form autoComplete="off">
                 <Field type="text" name="searchImg" placeholder="Search" />
