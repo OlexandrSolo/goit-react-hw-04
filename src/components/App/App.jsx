@@ -47,7 +47,6 @@ function App() {
     setImages([]);
     setValue(value);
   };
-
   const handleLoadMore = () => {
     setPage(page + 1);
   };
