@@ -1,11 +1,15 @@
-export default function ItemGallery({ image }) {
-  console.log(image);
+import styles from "./itemGallery.module.css";
+
+export default function ItemGallery({ src, alt, contain }) {
   return (
     <div>
-      <div>
-        <img src={image.urls.small} alt={image.alt_description} />
+      <div
+        className={
+          contain ? styles.container + " " + styles.contain : styles.container
+        }
+      >
+        <img src={src} alt={alt} />
       </div>
-      <p>{image.description}</p>
     </div>
   );
 }

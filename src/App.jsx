@@ -3,8 +3,9 @@ import { Triangle } from "react-loader-spinner";
 import { useEffect, useState } from "react";
 import "./App.css";
 import fetchImagesWithTopic from "./components/servise/images-api";
-import Header from "./components/header/header";
-import Gallery from "./components/galleryList/galleryList";
+import Header from "./components/Header/Header";
+import Gallery from "./components/GalleryList/GalleryList";
+import ImageModal from "./components/ImageModal/ImageModal";
 
 function App() {
   const [value, setValue] = useState("");
@@ -12,6 +13,11 @@ function App() {
   const [images, setImages] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [modal, setModal] = useState({ src: "", alt: "", isOpen: false });
+  const handleModal = ({ src, alt, isOpen }) => {
+    setModal({ src: src, alt: alt, isOpen: isOpen });
+  };
 
   const wrapperStyle = {
     position: "absolute",
@@ -42,7 +48,7 @@ function App() {
 
   const handleSubmit = (value) => {
     if (value.trim() === "") {
-      toast("Please entered text", {
+      toast("What? You must entered text", {
         icon: "🔎",
       });
     }
@@ -76,7 +82,7 @@ function App() {
         </div>
       )}
       {images.length > 0 ? (
-        <Gallery images={images} />
+        <Gallery images={images} onClick={handleModal} />
       ) : (
         <div>
           <Toaster position="bottom-center" reverseOrder={false} />
@@ -87,6 +93,15 @@ function App() {
         <button onClick={handleLoadMore} type="button">
           Load more
         </button>
+      )}
+
+      {modal.isOpen && (
+        <ImageModal
+          src={modal.src}
+          alt={modal.alt}
+          isOpen={modal.isOpen}
+          onClose={handleModal}
+        />
       )}
     </>
   );
