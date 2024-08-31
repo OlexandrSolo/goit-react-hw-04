@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./App.module.css";
 import fetchImagesWithTopic from "../service/images-api";
-import Header from "../Header/Header";
+// import Header from "../Header/Header";
 import Gallery from "../GalleryList/GalleryList";
 import ImageModal from "../ImageModal/ImageModal";
 import Loading from "../Loading/Loading";
@@ -53,7 +53,7 @@ function App() {
 
   return (
     <>
-      <Header submitForm={handleSubmit} />
+      {/* <Header submitForm={handleSubmit} /> */}
       <div className={styles.container}>
         {loading && <Loading />}
         {error && <ErrorMessage />}
