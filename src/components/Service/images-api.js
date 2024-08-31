@@ -15,6 +15,6 @@ export default async function fetchImagesWithTopic(topic, page) {
     })
     return {
         results: response.data.results,
-        totalPage: response.data.total_page
+        totalPage: response.data.total_pages
     }
 }

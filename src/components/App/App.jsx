@@ -32,6 +32,7 @@ function App() {
         setError(false);
         const newImages = await fetchImagesWithTopic(value, page);
         setImages((prevState) => [...prevState, ...newImages.results]);
+        console.log(newImages);
         setTotalPage(newImages.totalPage);
         setShowBtn(totalPage && totalPage !== page);
       } catch (error) {
@@ -58,7 +59,9 @@ function App() {
         {loading && <Loading />}
         {error && <ErrorMessage />}
         {images.length > 0 && <Gallery images={images} onClick={handleModal} />}
-        {!loading && showBtn && <Button handleLoad={handleLoadMore} />}
+        {images.length > 0 && !loading && showBtn && (
+          <Button handleLoad={handleLoadMore} />
+        )}
 
         {modal.isOpen && (
           <ImageModal
