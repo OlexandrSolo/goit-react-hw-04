@@ -9,8 +9,12 @@ export default async function fetchImagesWithTopic(topic, page) {
         params: {
             query: topic,
             client_id: apiKEY,
-            page
+            page,
+            per_page: 12.
         }
     })
-    return response.data.results
+    return {
+        results: response.data.results,
+        totalPage: response.data.total_page
+    }
 }

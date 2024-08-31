@@ -1,4 +1,5 @@
 import ItemGallery from "../ItemGallery/ItemGallery";
+import styles from "../GalleryList/Gallery.module.css";
 
 export default function Gallery({ images, onClick }) {
   const handleClick = (src, alt, isOpen) => {
@@ -6,7 +7,7 @@ export default function Gallery({ images, onClick }) {
   };
 
   return (
-    <ul>
+    <ul className={styles.parent}>
       {images.map((image) => (
         <li
           onClick={() =>
