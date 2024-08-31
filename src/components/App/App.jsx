@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./App.module.css";
-import fetchImagesWithTopic from "../service/images-api";
-import Header from "../headerTest/Header";
+import fetchImagesWithTopic from "../Service/images-api";
+import Header from "../Header/Header";
 import Gallery from "../GalleryList/GalleryList";
 import ImageModal from "../ImageModal/ImageModal";
 import Loading from "../Loading/Loading";

@@ -1,4 +1,4 @@
-import SearchForm from "../searchForm/SearchForm";
+import SearchForm from "../SearchForm/SearchForm";
 import styles from "./Header.module.css";
 
 export default function Header({ submitForm }) {
