@@ -1,7 +1,7 @@
 import { Field, Form, Formik } from "formik";
 import toast, { Toaster } from "react-hot-toast";
 import { FcSearch } from "react-icons/fc";
-import styles from "../SearchForm/SearchForm.module.css";
+import styles from "./SearchForm.module.css";
 
 export default function SearchForm({ submitForm }) {
   const handleSubmitForm = (values, actions) => {
