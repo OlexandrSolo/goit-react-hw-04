@@ -1,6 +1,6 @@
-import styles from "../Button/Button.module.css";
+import styles from "../LoadMoreBtn/LoadMoreBtn.module.css";
 
-export default function Button({ handleLoad }) {
+export default function LoadMoreBtn({ handleLoad }) {
   return (
     <button className={styles.button} onClick={handleLoad} type="button">
       Load more

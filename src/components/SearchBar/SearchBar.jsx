@@ -1,9 +1,9 @@
 import { Field, Form, Formik } from "formik";
 import toast, { Toaster } from "react-hot-toast";
 import { FcSearch } from "react-icons/fc";
-import styles from "./SearchForm.module.css";
+import styles from "./SearchBar.module.css";
 
-export default function SearchForm({ submitForm }) {
+export default function SearchBar({ submitForm }) {
   const handleSubmitForm = (values, actions) => {
     if (values.searchImg.trim() === "") {
       return toast("What? You must entered text", {

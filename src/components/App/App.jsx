@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import styles from "./App.module.css";
 import fetchImagesWithTopic from "../Service/images-api";
 import Header from "../Header/Header";
-import Gallery from "../GalleryList/GalleryList";
+import ImageGallery from "../ImageGallery/ImageGallery";
 import ImageModal from "../ImageModal/ImageModal";
 import Loading from "../Loading/Loading";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import Button from "../Button/Button";
+import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 
 function App() {
   const [value, setValue] = useState("");
@@ -58,9 +58,11 @@ function App() {
       <div className={styles.container}>
         {loading && <Loading />}
         {error && <ErrorMessage />}
-        {images.length > 0 && <Gallery images={images} onClick={handleModal} />}
+        {images.length > 0 && (
+          <ImageGallery images={images} onClick={handleModal} />
+        )}
         {images.length > 0 && !loading && showBtn && (
-          <Button handleLoad={handleLoadMore} />
+          <LoadMoreBtn handleLoad={handleLoadMore} />
         )}
 
         {modal.isOpen && (

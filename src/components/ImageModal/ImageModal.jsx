@@ -1,4 +1,4 @@
-import ItemGallery from "../ItemGallery/ItemGallery";
+import ItemGallery from "../ImageCard/ImageCard";
 import Modal from "react-modal";
 
 export default function ImageModal({ src, alt, isOpen, onClose }) {

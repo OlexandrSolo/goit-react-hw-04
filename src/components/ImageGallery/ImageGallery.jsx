@@ -1,7 +1,7 @@
-import ItemGallery from "../ItemGallery/ItemGallery";
-import styles from "../GalleryList/Gallery.module.css";
+import ImageCard from "../ImageCard/ImageCard";
+import styles from "../ImageGallery/ImageGallery.module.css";
 
-export default function Gallery({ images, onClick }) {
+export default function ImageGallery({ images, onClick }) {
   const handleClick = (src, alt, isOpen) => {
     onClick({ src, alt, isOpen });
   };
@@ -16,7 +16,7 @@ export default function Gallery({ images, onClick }) {
           className="itemGallery"
           key={image.id}
         >
-          <ItemGallery src={image.urls.small} alt={image.alt_description} />
+          <ImageCard src={image.urls.small} alt={image.alt_description} />
         </li>
       ))}
     </ul>

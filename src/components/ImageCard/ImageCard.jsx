@@ -1,6 +1,6 @@
-import styles from "./itemGallery.module.css";
+import styles from "./ImageCard.module.css";
 
-export default function ItemGallery({ src, alt, contain }) {
+export default function ImageCard({ src, alt, contain }) {
   return (
     <>
       <div
