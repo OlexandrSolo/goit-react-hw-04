@@ -1,10 +1,11 @@
 import ItemGallery from "../ImageCard/ImageCard";
+import styles from "./ImageModal.module.css";
 import Modal from "react-modal";
 
 export default function ImageModal({ src, alt, isOpen, onClose }) {
-  const handleClose = () => {
-    onClose({ src: "", alt: "", isOpen: false });
-  };
+  function closeModal() {
+    onClose(false);
+  }
 
   return (
     <Modal
@@ -18,10 +19,12 @@ export default function ImageModal({ src, alt, isOpen, onClose }) {
       isOpen={isOpen}
       shouldCloseOnOverlayClick={true}
       shouldCloseOnEsc={true}
-      onRequestClose={handleClose}
+      onRequestClose={closeModal}
       ariaHideApp={false}
     >
-      <ItemGallery src={src} alt={alt} contain={true} />
+      <div className={styles.container}>
+        <img src={src} alt={alt} />
+      </div>
     </Modal>
   );
 }

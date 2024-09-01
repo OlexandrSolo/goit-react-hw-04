@@ -3,16 +3,15 @@ import styles from "../ImageGallery/ImageGallery.module.css";
 
 export default function ImageGallery({ images, onClick }) {
   const handleClick = (src, alt, isOpen) => {
-    onClick({ src, alt, isOpen });
+    // onClick({ src, alt, isOpen });
+    onClick({ alt, src });
   };
 
   return (
     <ul className={styles.parent}>
       {images.map((image) => (
         <li
-          onClick={() =>
-            handleClick(image.urls.regular, image.alt_description, true)
-          }
+          onClick={() => handleClick(image.urls.regular, image.alt_description)}
           className="itemGallery"
           key={image.id}
         >

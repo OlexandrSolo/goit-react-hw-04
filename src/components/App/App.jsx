@@ -16,11 +16,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [showBtn, setShowBtn] = useState(false);
   const [totalPage, setTotalPage] = useState(999);
-
-  const [modal, setModal] = useState({ src: "", alt: "", isOpen: false });
-  const handleModal = ({ src, alt, isOpen }) => {
-    setModal({ src: src, alt: alt, isOpen: isOpen });
-  };
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalImg, setModalImg] = useState({ src: "", alt: "" });
 
   useEffect(() => {
     if (value.trim() === "") {
@@ -32,7 +29,6 @@ function App() {
         setError(false);
         const newImages = await fetchImagesWithTopic(value, page);
         setImages((prevState) => [...prevState, ...newImages.results]);
-        console.log(newImages);
         setTotalPage(newImages.totalPage);
         setShowBtn(totalPage && totalPage !== page);
       } catch (error) {
@@ -52,6 +48,11 @@ function App() {
     setPage(page + 1);
   };
 
+  const handleClickImg = ({ src, alt }) => {
+    setModalImg({ alt: alt, src: src });
+    setIsOpen(true);
+  };
+
   return (
     <>
       <Header submitForm={handleSubmit} />
@@ -59,20 +60,18 @@ function App() {
         {loading && <Loading />}
         {error && <ErrorMessage />}
         {images.length > 0 && (
-          <ImageGallery images={images} onClick={handleModal} />
+          <ImageGallery images={images} onClick={handleClickImg} />
         )}
         {images.length > 0 && !loading && showBtn && (
           <LoadMoreBtn handleLoad={handleLoadMore} />
         )}
 
-        {modal.isOpen && (
-          <ImageModal
-            src={modal.src}
-            alt={modal.alt}
-            isOpen={modal.isOpen}
-            onClose={handleModal}
-          />
-        )}
+        <ImageModal
+          src={modalImg.src}
+          alt={modalImg.alt}
+          isOpen={modalIsOpen}
+          onClose={setIsOpen}
+        />
       </div>
     </>
   );
